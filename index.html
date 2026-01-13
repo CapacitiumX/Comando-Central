@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>COMMAND CENTER 28.0 | FINAL</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #e0e0e0;
+            --accent: #0d6efd; 
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1, h2 { text-align: center; color: white; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 0.9rem; }
+
+        /* BUSCADOR */
+        .search-hero {
+            background: #252525; padding: 20px; border-radius: 12px;
+            text-align: center; margin-bottom: 40px; border: 1px solid #333;
+        }
+        .hero-input {
+            width: 100%; max-width: 600px; padding: 15px; font-size: 1.2rem;
+            background: #111; border: 2px solid #444; color: white;
+            border-radius: 8px; text-align: center; transition: 0.3s;
+        }
+        .hero-input:focus { border-color: var(--accent); outline: none; }
+
+        /* SECCIONES */
+        .section-header {
+            border-bottom: 1px solid #333; margin: 50px 0 20px 0;
+            padding-bottom: 10px; color: #888; font-size: 1.1rem;
+            text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
+        }
+
+        /* GRID */
+        .app-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
+            gap: 15px;
+        }
+
+        .app-card {
+            background: var(--card-bg); border: 1px solid #333; border-radius: 12px;
+            padding: 15px 5px; text-align: center; cursor: pointer;
+            transition: all 0.2s ease; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; height: 110px;
+            color: var(--text); position: relative; overflow: hidden;
+            border-top: 3px solid #555;
+            text-decoration: none;
+        }
+        .app-card:hover { transform: translateY(-5px); background: #2a2a2a; border-color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .app-card .icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .app-card .title { font-size: 0.8rem; font-weight: 500; line-height: 1.2; }
+
+        /* VISTAS */
+        .app-view { display: none; padding-top: 20px; animation: fadeIn 0.3s; }
+        .app-view.active { display: block; }
+        .btn-back {
+            background: #333; color: white; padding: 10px 25px; border-radius: 30px;
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
+            margin-bottom: 20px; font-weight: bold;
+        }
+        .btn-back:hover { background: #555; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ESTILOS FACTURA */
+        .logo-section { display: flex; justify-content: center; margin-bottom: 40px; }
+        .logo-area {
+            width: 120px; height: 120px; border-radius: 50%; border: 2px dashed #555;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+            background-color: #000; cursor: pointer;
+        }
+        .logo-area img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        #logoInput { display: none; }
+
+        .data-section { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 40px; }
+        .box { background: #1a1a1a; padding: 25px; border-radius: 8px; border: 1px solid #333; }
+        
+        input, select { 
+            width: 100%; padding: 12px 10px; background: #252525; border: 1px solid #444; 
+            color: white; border-radius: 5px; margin-bottom: 15px; box-sizing: border-box; 
+        }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px 10px; border-bottom: 1px solid #333; text-align: left; }
+        th { color: #888; font-size: 0.9rem; text-transform: uppercase; }
+        .btn-action { width: 100%; padding: 15px; background: var(--accent); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1.1rem; margin-top: 20px;}
+
+        /* IMPRESIÓN LIMPIA */
+        @media print {
+            @page { margin: 0; size: auto; }
+            body { margin: 3cm !important; background: white !important; color: black !important; -webkit-print-color-adjust: exact; }
+            body * { visibility: hidden; }
+            #view-factura, #view-factura * { visibility: visible; }
+            #view-factura { position: absolute; left: 0; top: 0; width: 100%; }
+            .btn-back, .btn-action, .print-hidden, #logoText { display: none !important; }
+            .box { border: none !important; padding: 0 !important; background: transparent !important; margin-bottom: 0 !important; }
+            .logo-area { border: none !important; }
+            input { border: none !important; background: transparent !important; padding: 5px 0 !important; margin-bottom: 8px !important; color: black !important; font-family: 'Helvetica', sans-serif; font-size: 12pt; width: 100%; border-bottom: 1px solid #eee !important; }
+            h3 { color: black !important; border-bottom: 2px solid black; padding-bottom: 5px; margin-bottom: 15px; font-size: 14pt; }
+            ::placeholder { color: transparent; }
+            th { color: black !important; border-bottom: 2px solid black !important; font-weight: bold; }
+            td { color: black !important; border-bottom: 1px solid #ccc !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div id="main-menu" class="app-view active">
+            
+            <h1>COMMAND CENTER 28.0</h1>
+            <div class="subtitle">Suite Completa de Aplicaciones</div>
+
+            <div class="search-hero">
+                <label>🎯 Busca tu próximo empleo:</label>
+                <input type="text" id="targetJob" class="hero-input" placeholder="Ej. Docente, Abogado..." onkeyup="saveConfig()">
+            </div>
+
+            <div class="section-header">🔧 Utilidades</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="openView('view-factura')" style="border-top-color: white;"><div class="icon">📑</div><div class="title">Facturador</div></div>
+                <div class="app-card" onclick="openView('view-crm')" style="border-top-color: white;"><div class="icon">📂</div><div class="title">CRM</div></div>
+            </div>
+
+            <div class="section-header">🌐 Navegadores</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('https://www.google.com/')" style="border-top-color: #4285F4;"><div class="icon">⚪</div><div class="title">Chrome</div></div>
+                <div class="app-card" onclick="go('https://search.brave.com/')" style="border-top-color: #FB542B;"><div class="icon">🦁</div><div class="title">Brave</div></div>
+                <div class="app-card" onclick="go('https://www.mozilla.org/')" style="border-top-color: #FF7139;"><div class="icon">🦊</div><div class="title">Firefox</div></div>
+            </div>
+
+            <div class="section-header">☁️ Oficina & Correo</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('https://m365.cloud.microsoft/')" style="border-top-color: #D83B01;"><div class="icon">📝</div><div class="title">Office 365</div></div>
+                <div class="app-card" onclick="go('https://mail.google.com/')" style="border-top-color: #EA4335;"><div class="icon">📧</div><div class="title">Gmail</div></div>
+                <div class="app-card" onclick="go('https://outlook.live.com/')" style="border-top-color: #0078D4;"><div class="icon">📨</div><div class="title">Outlook</div></div>
+                <div class="app-card" onclick="go('https://github.com/')" style="border-top-color: #ffffff;"><div class="icon">🐙</div><div class="title">GitHub</div></div>
+                
+                <div class="app-card" onclick="go('https://onedrive.live.com/')" style="border-top-color: #0078D4;"><div class="icon">☁️</div><div class="title">OneDrive</div></div>
+                <div class="app-card" onclick="go('https://www.dropbox.com/')" style="border-top-color: #0061FF;"><div class="icon">📦</div><div class="title">Dropbox</div></div>
+                <div class="app-card" onclick="go('https://trello.com/')" style="border-top-color: #0079BF;"><div class="icon">📋</div><div class="title">Trello</div></div>
+                <div class="app-card" onclick="go('https://asana.com/')" style="border-top-color: #F06A6A;"><div class="icon">✅</div><div class="title">Asana</div></div>
+                <div class="app-card" onclick="go('https://www.avg.com/')" style="border-top-color: #79C753;"><div class="icon">🛡️</div><div class="title">AVG</div></div>
+                <div class="app-card" onclick="go('https://safety.google/authentication/')" style="border-top-color: #4285F4;"><div class="icon">🔐</div><div class="title">Authenticator</div></div>
+                <div class="app-card" onclick="go('https://teams.microsoft.com/')" style="border-top-color: #464EB8;"><div class="icon">🤝</div><div class="title">Teams</div></div>
+                <div class="app-card" onclick="go('https://zoom.us/join')" style="border-top-color: #2D8CFF;"><div class="icon">🎥</div><div class="title">Zoom</div></div>
+            </div>
+
+            <div class="section-header">💸 Finanzas & Pagos</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('https://nu.com.mx/')" style="border-top-color: #820AD1;"><div class="icon">🟣</div><div class="title">Nu</div></div>
+                <div class="app-card" onclick="go('https://www.mercadopago.com.mx/')" style="border-top-color: #009EE3;"><div class="icon">🤝</div><div class="title">Mercado Pago</div></div>
+                <div class="app-card" onclick="go('https://www.paypal.com/')" style="border-top-color: #003087;"><div class="icon">🅿️</div><div class="title">PayPal</div></div>
+                <div class="app-card" onclick="go('https://www.plata.com/')" style="border-top-color: #A0A0A0;"><div class="icon">💳</div><div class="title">Plata</div></div>
+                <div class="app-card" onclick="go('https://web.didiglobal.com/mx/didi-card/')" style="border-top-color: #F56B23;"><div class="icon">🟧</div><div class="title">DiDi Card</div></div>
+            </div>
+
+            <div class="section-header">🏛️ Servicios & Trámites</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('http://www.imss.gob.mx/imssdigital')" style="border-top-color: #13322B;"><div class="icon">🏥</div><div class="title">IMSS Digital</div></div>
+                <div class="app-card" onclick="go('https://app.cfe.mx/')" style="border-top-color: #2F855A;"><div class="icon">⚡</div><div class="title">CFE</div></div>
+                <div class="app-card" onclick="go('https://www.sadm.gob.mx/')" style="border-top-color: #3182CE;"><div class="icon">💧</div><div class="title">Agua y Drenaje</div></div>
+                <div class="app-card" onclick="go('https://www.att.com.mx/mi-att')" style="border-top-color: #009FDB;"><div class="icon">📱</div><div class="title">Mi AT&T</div></div>
+                <div class="app-card" onclick="go('https://moovitapp.com/')" style="border-top-color: #F25F5C;"><div class="icon">🚌</div><div class="title">Moovit</div></div>
+                <div class="app-card" onclick="go('https://www.waze.com/')" style="border-top-color: #33CCFF;"><div class="icon">🚗</div><div class="title">Waze</div></div>
+            </div>
+
+            <div class="section-header">🎨 Edición & Fotos</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('https://www.capcut.com/')" style="border-top-color: #000;"><div class="icon">🎬</div><div class="title">CapCut</div></div>
+                <div class="app-card" onclick="go('https://filmora.wondershare.net/')" style="border-top-color: #36CFC9;"><div class="icon">🎞️</div><div class="title">Filmora</div></div>
+                <div class="app-card" onclick="go('https://photos.google.com/')" style="border-top-color: #FBBC05;"><div class="icon">🖼️</div><div class="title">Google Fotos</div></div>
+                <div class="app-card" onclick="go('https://remini.ai/')" style="border-top-color: #EA2F2F;"><div class="icon">🔴</div><div class="title">Remini</div></div>
+                <div class="app-card" onclick="go('https://www.canva.com/')" style="border-top-color: #00C4CC;"><div class="icon">🖌️</div><div class="title">Canva</div></div>
+            </div>
+
+            <div class="section-header">🍿 Entretenimiento</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('https://www.youtube.com/')" style="border-top-color: #ff0000;"><div class="icon">▶</div><div class="title">YouTube</div></div>
+                <div class="app-card" onclick="go('https://cuevana3.eu/')" style="border-top-color: #2E86DE;"><div class="icon">🎬</div><div class="title">Cuevana</div></div>
+                <div class="app-card" onclick="go('https://www.paramountplus.com/')" style="border-top-color: #0064FF;"><div class="icon">🏔️</div><div class="title">Paramount</div></div>
+                <div class="app-card" onclick="go('https://www.xbox.com/play')" style="border-top-color: #107C10;"><div class="icon">🎮</div><div class="title">Fortnite</div></div>
+                <div class="app-card" onclick="go('https://www.espn.com.mx/')" style="border-top-color: #CC0000;"><div class="icon">🏀</div><div class="title">ESPN</div></div>
+                <div class="app-card" onclick="go('https://www.shazam.com/')" style="border-top-color: #0088FF;"><div class="icon">🌀</div><div class="title">Shazam</div></div>
+                <div class="app-card" onclick="go('https://www.twitch.tv/')" style="border-top-color: #9146FF;"><div class="icon">👾</div><div class="title">Twitch</div></div>
+            </div>
+
+            <div class="section-header">🛍️ Compras & App</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('https://www.mercadolibre.com.mx/')" style="border-top-color: #FFE600;"><div class="icon">📦</div><div class="title">MercadoLibre</div></div>
+                <div class="app-card" onclick="go('https://www.temu.com/')" style="border-top-color: #FB7701;"><div class="icon">🟧</div><div class="title">Temu</div></div>
+                <div class="app-card" onclick="go('https://www.ubereats.com/')" style="border-top-color: #06C167;"><div class="icon">🍔</div><div class="title">Uber Eats</div></div>
+            </div>
+
+            <div class="section-header">💬 Social</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('https://www.facebook.com/')" style="border-top-color: #1877F2;"><div class="icon">📘</div><div class="title">Facebook</div></div>
+                <div class="app-card" onclick="go('https://www.messenger.com/')" style="border-top-color: #00B2FF;"><div class="icon">💬</div><div class="title">Messenger</div></div>
+                <div class="app-card" onclick="go('https://web.whatsapp.com/')" style="border-top-color: #25d366;"><div class="icon">🟢</div><div class="title">WhatsApp</div></div>
+                <div class="app-card" onclick="go('https://www.snapchat.com/')" style="border-top-color: #FFFC00;"><div class="icon">👻</div><div class="title">Snapchat</div></div>
+                <div class="app-card" onclick="go('https://www.pinterest.com/')" style="border-top-color: #E60023;"><div class="icon">📌</div><div class="title">Pinterest</div></div>
+                <div class="app-card" onclick="go('https://espanol.yahoo.com/')" style="border-top-color: #410093;"><div class="icon">🟣</div><div class="title">Yahoo</div></div>
+                <div class="app-card" onclick="go('https://tinder.com/')" style="border-top-color: #FE3C72;"><div class="icon">🔥</div><div class="title">Tinder</div></div>
+            </div>
+
+            <div class="section-header">🎓 Educación</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('http://maestria.ucnl.edu.mx/')" style="border-top-color: #6a1b9a;"><div class="icon">🎓</div><div class="title">UCNL</div></div>
+                <div class="app-card" onclick="go('https://es.duolingo.com/')" style="border-top-color: #58CC02;"><div class="icon">🦉</div><div class="title">Duolingo</div></div>
+                <div class="app-card" onclick="go('https://www.memrise.com/')" style="border-top-color: #FEA402;"><div class="icon">🧠</div><div class="title">Memrise</div></div>
+                <div class="app-card" onclick="go('https://voxy.com/')" style="border-top-color: #FF6600;"><div class="icon">📙</div><div class="title">Voxy</div></div>
+                <div class="app-card" onclick="go('https://www.itranslate.com/')" style="border-top-color: #2E86DE;"><div class="icon">🌐</div><div class="title">iTranslate</div></div>
+                <div class="app-card" onclick="go('https://youglish.com/')" style="border-top-color: #E74C3C;"><div class="icon">🗣️</div><div class="title">Youglish</div></div>
+                <div class="app-card" onclick="go('https://www.google.com/search?q=Banana+Pro')" style="border-top-color: #F1C40F;"><div class="icon">🍌</div><div class="title">Banana Pro</div></div>
+            </div>
+
+            <div class="section-header">🧠 IA</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="go('https://chatgpt.com/')" style="border-top-color: #10a37f;"><div class="icon">🤖</div><div class="title">ChatGPT</div></div>
+                <div class="app-card" onclick="go('https://gemini.google.com/')" style="border-top-color: #88a4e6;"><div class="icon">✨</div><div class="title">Gemini</div></div>
+                <div class="app-card" onclick="go('https://grok.x.ai/')" style="border-top-color: #333;"><div class="icon">⬛</div><div class="title">Grok</div></div>
+            </div>
+
+            <div class="section-header">💼 Empleo</div>
+            <div class="app-grid">
+                <div class="app-card" onclick="searchJob('linkedin')" style="border-top-color: #0a66c2;"><div class="icon">🔵</div><div class="title">LinkedIn</div></div>
+                <div class="app-card" onclick="searchJob('computrabajo')" style="border-top-color: #f39c12;"><div class="icon">🟠</div><div class="title">CompuTrabajo</div></div>
+                <div class="app-card" onclick="searchJob('occ')" style="border-top-color: #e74c3c;"><div class="icon">🔴</div><div class="title">OCC</div></div>
+                <div class="app-card" onclick="searchJob('indeed')" style="border-top-color: #2980b9;"><div class="icon">🔹</div><div class="title">Indeed</div></div>
+                <div class="app-card" onclick="searchJob('glassdoor')" style="border-top-color: #27ae60;"><div class="icon">🟢</div><div class="title">Glassdoor</div></div>
+            </div>
+
+            <br><br>
+        </div>
+
+        <div id="view-factura" class="app-view">
+            <button class="btn-back" onclick="openView('main-menu')">🏠 Volver al Menú</button>
+            <h2 class="print-hidden">Generador de Documentos</h2>
+            
+            <div class="logo-section">
+                <div class="logo-area" onclick="document.getElementById('logoInput').click()">
+                    <img id="logoPreview" src="" alt="Logo">
+                    <span id="logoText" class="print-hidden">Subir Logo</span>
+                </div>
+                <input type="file" id="logoInput" accept="image/*" onchange="loadLogo(event)">
+            </div>
+
+            <div class="data-section">
+                <div class="box">
+                    <h3>Emisor</h3>
+                    <input type="text" id="emiName" placeholder="Tu Nombre / Empresa" onkeyup="saveInv()">
+                    <input type="text" id="emiRFC" placeholder="RFC" onkeyup="saveInv()">
+                    <input type="text" id="emiContact" placeholder="Contacto" onkeyup="saveInv()">
+                </div>
+
+                <div class="box">
+                    <h3>Cliente</h3>
+                    <input type="text" id="cliName" placeholder="Nombre Cliente" onkeyup="saveInv()">
+                    <input type="text" id="cliDir" placeholder="Dirección" onkeyup="saveInv()">
+                    <input type="date" id="docDate" onchange="saveInv()">
+                </div>
+            </div>
+            
+            <div class="box">
+                <h3 class="print-hidden">Conceptos</h3>
+                <table>
+                    <thead><tr><th>Descripción</th><th>Precio</th><th>Cant.</th><th>Total</th></tr></thead>
+                    <tbody>
+                        <tr><td><input type="text" id="it1" placeholder="..." onkeyup="saveInv()"></td><td><input type="number" id="pr1" placeholder="0.00" onkeyup="saveInv()"></td><td><input type="number" id="qt1" value="1" onkeyup="saveInv()"></td><td>--</td></tr>
+                        <tr><td><input type="text" id="it2" placeholder="..." onkeyup="saveInv()"></td><td><input type="number" id="pr2" placeholder="0.00" onkeyup="saveInv()"></td><td><input type="number" id="qt2" value="1" onkeyup="saveInv()"></td><td>--</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn-action" onclick="window.print()">🖨️ IMPRIMIR DOCUMENTO</button>
+        </div>
+
+        <div id="view-crm" class="app-view">
+            <button class="btn-back" onclick="openView('main-menu')">🏠 Volver al Menú</button>
+            <h2>CRM</h2>
+            <div class="box" style="display:flex; gap:10px;">
+                <input type="text" id="crmComp" placeholder="Empresa...">
+                <input type="text" id="crmRole" placeholder="Puesto...">
+                <button class="btn-action" style="width:100px; margin-top:0;" onclick="addCrm()">➕</button>
+            </div>
+            <div class="box">
+                <table><tbody id="crmBody"></tbody></table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openView(id) {
+            document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+        function go(url) { window.open(url, '_blank'); }
+
+        function loadLogo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('logoPreview');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('logoText').style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        const fIds = ['emiName','emiRFC','emiContact','cliName','cliDir','docDate','it1','pr1','qt1','it2','pr2','qt2'];
+        fIds.forEach(id => { const v = localStorage.getItem('inv_'+id); if(v) document.getElementById(id).value = v; });
+        function saveInv() { fIds.forEach(id => localStorage.setItem('inv_'+id, document.getElementById(id).value)); }
+        if(!document.getElementById('docDate').value) document.getElementById('docDate').valueAsDate = new Date();
+
+        let db = JSON.parse(localStorage.getItem('hub_crm_28')) || [];
+        renderCrm();
+        function addCrm() {
+            const c=document.getElementById('crmComp').value, r=document.getElementById('crmRole').value;
+            if(c&&r) { db.push({id:Date.now(),c,r}); localStorage.setItem('hub_crm_28',JSON.stringify(db)); renderCrm(); }
+        }
+        function renderCrm() {
+            const t = document.getElementById('crmBody'); t.innerHTML="";
+            db.forEach(x => t.innerHTML += `<tr><td>${x.c}</td><td>${x.r}</td><td><button onclick="delCrm(${x.id})">❌</button></td></tr>`);
+        }
+        function delCrm(id) { db=db.filter(x=>x.id!==id); localStorage.setItem('hub_crm_28',JSON.stringify(db)); renderCrm(); }
+
+        const jInput = document.getElementById('targetJob');
+        jInput.value = localStorage.getItem('hub_job_28') || "";
+        function saveConfig() { localStorage.setItem('hub_job_28', jInput.value); }
+        
+        function searchJob(plat) {
+            const v = jInput.value.trim();
+            const q = v.replace(/\s+/g,'+'), d=v.replace(/\s+/g,'-');
+            let u='';
+            if(plat==='linkedin') u = v ? `https://www.linkedin.com/jobs/search?keywords=${q}&location=Monterrey` : 'https://www.linkedin.com/jobs';
+            if(plat==='computrabajo') u = v ? `https://mx.computrabajo.com/trabajo-de-${d}-en-monterrey` : 'https://mx.computrabajo.com/';
+            if(plat==='occ') u = v ? `https://www.occ.com.mx/empleos/de-${d}/en-nuevo-leon/` : 'https://www.occ.com.mx/';
+            if(plat==='indeed') u = v ? `https://mx.indeed.com/jobs?q=${q}&l=Monterrey` : 'https://mx.indeed.com/';
+            if(plat==='glassdoor') u = v ? `https://www.glassdoor.com.mx/Job/jobs.htm?sc.keyword=${q}&locT=C&locId=4366606&locKeyword=Monterrey` : 'https://www.glassdoor.com.mx/';
+            window.open(u, '_blank');
+        }
+    </script>
+</body>
+</html>
